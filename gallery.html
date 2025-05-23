@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Responsive Gallery</title>
   <style>
     * {
@@ -16,28 +17,32 @@
       background-color: #fff;
     }
 
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); /* bigger min width for images */
-  grid-auto-rows: calc((100vh - 50px) / 2); /* 3 rows visible, bigger height */
-  gap: 10px;
-  width: 100vw;
-  margin: 0 auto;
-}
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+      /* bigger min width for images */
+      grid-auto-rows: calc((100vh - 50px) / 2);
+      /* 3 rows visible, bigger height */
+      gap: 10px;
+      width: 100vw;
+      margin: 0 auto;
+    }
 
-.gallery-grid img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  cursor: pointer;
-}
+    .gallery-grid img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      cursor: pointer;
+    }
 
     .lightbox-overlay {
       display: none;
       position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
       background: rgba(0, 0, 0, 0.95);
       align-items: center;
       justify-content: center;
@@ -77,6 +82,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <div class="gallery-grid">
@@ -168,4 +174,5 @@
   </script>
 
 </body>
+
 </html>
