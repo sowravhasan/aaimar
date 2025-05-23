@@ -251,27 +251,29 @@
 
 
 
-<!-- Horizontal Image Slider -->
-<section id="image-slider" class="main style3">
-  <div class="content">
-    <h2>Featured Slider</h2>
-    <div class="slider-container">
-      <div class="slider">
-        <img src="images/fulls/01.webp" alt="Image 1">
-        <img src="images/fulls/02.webp" alt="Image 2">
-        <img src="images/fulls/03.webp" alt="Image 3">
-        <img src="images/fulls/04.webp" alt="Image 4">
-        <img src="images/fulls/05.webp" alt="Image 5">
-        <img src="images/fulls/06.webp" alt="Image 6">
-        <img src="images/fulls/07.webp" alt="Image 7">
-        <img src="images/fulls/08.webp" alt="Image 8">
-        <img src="images/fulls/09.webp" alt="Image 9">
-        <img src="images/fulls/10.webp" alt="Image 10">
-      </div>
-    </div>
-  </div>
-</section>
+<!-- Clean Modern Image Carousel -->
+<section id="image-slider" class="carousel-wrapper">
+  <h2 class="carousel-title">Featured Slider</h2>
 
+  <div class="carousel" onmouseover="pauseAutoplay()" onmouseout="startAutoplay()">
+    <button class="nav prev" onclick="scrollCarousel(-1)">❮</button>
+    <div class="track" id="carousel-track">
+      <img src="images/fulls/01.webp" alt="Image 1">
+      <img src="images/fulls/02.webp" alt="Image 2">
+      <img src="images/fulls/03.webp" alt="Image 3">
+      <img src="images/fulls/04.webp" alt="Image 4">
+      <img src="images/fulls/05.webp" alt="Image 5">
+      <img src="images/fulls/06.webp" alt="Image 6">
+      <img src="images/fulls/07.webp" alt="Image 7">
+      <img src="images/fulls/08.webp" alt="Image 8">
+      <img src="images/fulls/09.webp" alt="Image 9">
+      <img src="images/fulls/10.webp" alt="Image 10">
+    </div>
+    <button class="nav next" onclick="scrollCarousel(1)">❯</button>
+  </div>
+
+  <div class="dots" id="carousel-dots"></div>
+</section>
 
 
 
@@ -331,37 +333,73 @@
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
 			<script>
-  const slider = document.querySelector('.slider-container');
-  let isDown = false;
-  let startX;
-  let scrollLeft;
+const track = document.getElementById('carousel-track');
+const dotsContainer = document.getElementById('carousel-dots');
+const images = track.querySelectorAll('img');
+let currentIndex = 0;
+let autoplayInterval;
 
-  slider.addEventListener('mousedown', (e) => {
-    isDown = true;
-    slider.classList.add('active');
-    startX = e.pageX - slider.offsetLeft;
-    scrollLeft = slider.scrollLeft;
-  });
+// Determine how many images are visible
+function getVisibleCount() {
+  const trackWidth = track.offsetWidth;
+  const imgWidth = images[0].offsetWidth + 16;
+  return Math.floor(trackWidth / imgWidth);
+}
 
-  slider.addEventListener('mouseleave', () => {
-    isDown = false;
-    slider.classList.remove('active');
-  });
+function updateDots(index) {
+  dotsContainer.innerHTML = '';
+  const totalDots = Math.ceil(images.length / getVisibleCount());
+  for (let i = 0; i < totalDots; i++) {
+    const dot = document.createElement('button');
+    dot.classList.toggle('active', i === index);
+    dot.onclick = () => {
+      currentIndex = i;
+      scrollToIndex(currentIndex);
+    };
+    dotsContainer.appendChild(dot);
+  }
+}
 
-  slider.addEventListener('mouseup', () => {
-    isDown = false;
-    slider.classList.remove('active');
+function scrollToIndex(index) {
+  const visible = getVisibleCount();
+  const imgWidth = images[0].offsetWidth + 16;
+  track.scrollTo({
+    left: index * visible * imgWidth,
+    behavior: 'smooth'
   });
+  updateDots(index);
+}
 
-  slider.addEventListener('mousemove', (e) => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - slider.offsetLeft;
-    const walk = (x - startX) * 2; // scroll speed
-    slider.scrollLeft = scrollLeft - walk;
-  });
+function scrollCarousel(direction) {
+  const visible = getVisibleCount();
+  const maxIndex = Math.ceil(images.length / visible) - 1;
+  currentIndex = Math.max(0, Math.min(currentIndex + direction, maxIndex));
+  scrollToIndex(currentIndex);
+}
+
+function startAutoplay() {
+  autoplayInterval = setInterval(() => {
+    const visible = getVisibleCount();
+    const maxIndex = Math.ceil(images.length / visible) - 1;
+    currentIndex = (currentIndex + 1) % (maxIndex + 1);
+    scrollToIndex(currentIndex);
+  }, 4000);
+}
+
+function pauseAutoplay() {
+  clearInterval(autoplayInterval);
+}
+
+track.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  track.scrollLeft += e.deltaY;
+}, { passive: false });
+
+window.addEventListener('resize', () => updateDots(currentIndex));
+
+updateDots(currentIndex);
+startAutoplay();
 </script>
-
 
 	</body>
 </html>
