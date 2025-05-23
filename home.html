@@ -9,6 +9,12 @@
 
 		<!-- Link to your main CSS file -->
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<!-- Glide.js CSS -->
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+/>
+
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 
 
@@ -251,30 +257,34 @@
 
 
 
-<!-- Clean Modern Image Carousel -->
-<section id="image-slider" class="carousel-wrapper">
-  <h2 class="carousel-title">Featured Slider</h2>
-
-  <div class="carousel" onmouseover="pauseAutoplay()" onmouseout="startAutoplay()">
-    <button class="nav prev" onclick="scrollCarousel(-1)">❮</button>
-    <div class="track" id="carousel-track">
-      <img src="images/fulls/01.webp" alt="Image 1">
-      <img src="images/fulls/02.webp" alt="Image 2">
-      <img src="images/fulls/03.webp" alt="Image 3">
-      <img src="images/fulls/04.webp" alt="Image 4">
-      <img src="images/fulls/05.webp" alt="Image 5">
-      <img src="images/fulls/06.webp" alt="Image 6">
-      <img src="images/fulls/07.webp" alt="Image 7">
-      <img src="images/fulls/08.webp" alt="Image 8">
-      <img src="images/fulls/09.webp" alt="Image 9">
-      <img src="images/fulls/10.webp" alt="Image 10">
-    </div>
-    <button class="nav next" onclick="scrollCarousel(1)">❯</button>
+<div class="centered-header">
+  <header>
+    <h2>Gallery</h2>
+  </header>
+</div>
+<div class="swiper mySwiper">
+  <div class="swiper-wrapper">
+    <div class="swiper-slide"><img src="images/fulls/01.webp" alt="Bloom" /><div class="label"></div></div>
+    <div class="swiper-slide"><img src="images/fulls/02.webp" alt="Vivid" /><div class="label"></div></div>
+    <div class="swiper-slide"><img src="images/fulls/03.webp" alt="Petal" /><div class="label"></div></div>
+	<div class="swiper-slide"><img src="images/fulls/04.webp" alt="Petal" /><div class="label"></div></div>
+	<div class="swiper-slide"><img src="images/fulls/05.webp" alt="Petal" /><div class="label"></div></div>
+	<div class="swiper-slide"><img src="images/fulls/06.webp" alt="Petal" /><div class="label"></div></div>
+	<div class="swiper-slide"><img src="images/fulls/07.webp" alt="Petal" /><div class="label"></div></div>
+	<div class="swiper-slide"><img src="images/fulls/08.webp" alt="Petal" /><div class="label"></div></div>
+	<div class="swiper-slide"><img src="images/fulls/09.webp" alt="Petal" /><div class="label"></div></div>
+	<div class="swiper-slide"><img src="images/fulls/10.webp" alt="Petal" /><div class="label"></div></div>
+    <!-- Add more slides if needed -->
   </div>
-
-  <div class="dots" id="carousel-dots"></div>
-</section>
-
+  <!-- Navigation buttons -->
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+  <!-- Pagination -->
+  <div class="swiper-pagination"></div>
+</div>
+<div style="text-align: center; margin-top: 2rem;">
+  <a href="gallery.html" class="btn-light">See All</a>
+</div>
 
 
 
@@ -332,74 +342,45 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
-			<script>
-const track = document.getElementById('carousel-track');
-const dotsContainer = document.getElementById('carousel-dots');
-const images = track.querySelectorAll('img');
-let currentIndex = 0;
-let autoplayInterval;
+			<!-- Glide.js JavaScript -->
+            <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    const swiper = new Swiper(".mySwiper", {
+      effect: "coverflow",
+      grabCursor: true,
+      centeredSlides: true,
+      loop: true,
+      spaceBetween: 30,
+      coverflowEffect: {
+        rotate: 0,
+        stretch: 0,
+        depth: 100,
+        modifier: 2,
+        slideShadows: false,
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      breakpoints: {
+        0: {
+          slidesPerView: 1,
+        },
+        768: {
+          slidesPerView: 3,
+        }
+      }
+    });
+  </script>
 
-// Determine how many images are visible
-function getVisibleCount() {
-  const trackWidth = track.offsetWidth;
-  const imgWidth = images[0].offsetWidth + 16;
-  return Math.floor(trackWidth / imgWidth);
-}
 
-function updateDots(index) {
-  dotsContainer.innerHTML = '';
-  const totalDots = Math.ceil(images.length / getVisibleCount());
-  for (let i = 0; i < totalDots; i++) {
-    const dot = document.createElement('button');
-    dot.classList.toggle('active', i === index);
-    dot.onclick = () => {
-      currentIndex = i;
-      scrollToIndex(currentIndex);
-    };
-    dotsContainer.appendChild(dot);
-  }
-}
 
-function scrollToIndex(index) {
-  const visible = getVisibleCount();
-  const imgWidth = images[0].offsetWidth + 16;
-  track.scrollTo({
-    left: index * visible * imgWidth,
-    behavior: 'smooth'
-  });
-  updateDots(index);
-}
 
-function scrollCarousel(direction) {
-  const visible = getVisibleCount();
-  const maxIndex = Math.ceil(images.length / visible) - 1;
-  currentIndex = Math.max(0, Math.min(currentIndex + direction, maxIndex));
-  scrollToIndex(currentIndex);
-}
 
-function startAutoplay() {
-  autoplayInterval = setInterval(() => {
-    const visible = getVisibleCount();
-    const maxIndex = Math.ceil(images.length / visible) - 1;
-    currentIndex = (currentIndex + 1) % (maxIndex + 1);
-    scrollToIndex(currentIndex);
-  }, 4000);
-}
-
-function pauseAutoplay() {
-  clearInterval(autoplayInterval);
-}
-
-track.addEventListener('wheel', (e) => {
-  e.preventDefault();
-  track.scrollLeft += e.deltaY;
-}, { passive: false });
-
-window.addEventListener('resize', () => updateDots(currentIndex));
-
-updateDots(currentIndex);
-startAutoplay();
-</script>
 
 	</body>
 </html>
